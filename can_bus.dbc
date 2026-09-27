@@ -1,0 +1,55 @@
+VERSION ""
+
+NS_ :
+    NS_DESC_
+    CM_
+    BA_DEF_
+    BA_
+    VAL_
+    CAT_DEF_
+    CAT_
+    FILTER
+    BA_DEF_DEF_
+    EV_DATA_
+    ENVVAR_DATA_
+    SGTYPE_
+    SGTYPE_VAL_
+    BA_DEF_SGTYPE_
+    BA_SGTYPE_
+    SIG_TYPE_REF_
+    VAL_TABLE_
+    SIG_GROUP_
+    SIG_VALTYPE_
+    SIGTYPE_VALTYPE_
+    BO_TX_BU_
+    BA_DEF_REL_
+    BA_REL_
+    BA_DEF_DEF_REL_
+    BU_SG_REL_
+    BU_EV_REL_
+    BU_BO_REL_
+    SG_MUL_VAL_
+
+BS_:
+
+BU_: ECU_Moteur ECU_Freinage ECU_Dashboard
+
+BO_ 256 ECU_Moteur: 8 ECU_Moteur
+ SG_ RPM : 7|16@0+ (1,0) [800|4000] "rpm" ECU_Dashboard
+ SG_ Temperature : 23|8@0+ (1,0) [70|110] "degC" ECU_Dashboard
+
+BO_ 512 ECU_Freinage: 8 ECU_Freinage
+ SG_ Pression : 0|8@1+ (1,0) [0|100] "%" ECU_Dashboard
+ SG_ Etat : 8|8@1+ (1,0) [0|1] "" ECU_Dashboard
+
+CM_ BU_ ECU_Moteur "Calculateur moteur : génère régime moteur (RPM) et température.";
+CM_ BU_ ECU_Freinage "Calculateur de freinage : génère pression de freinage et état d'usure.";
+CM_ BU_ ECU_Dashboard "Tableau de bord : agrège et affiche les données reçues des autres ECU.";
+CM_ BO_ 256 "Trame ECU Moteur, émise toutes les ~1s.";
+CM_ BO_ 512 "Trame ECU Freinage, émise toutes les ~1.5s.";
+CM_ SG_ 256 RPM "Régime moteur, encodé big-endian (Motorola) sur 2 octets : (octet0<<8)|octet1.";
+CM_ SG_ 256 Temperature "Température moteur en °C, 1 octet brut, aucun facteur d'échelle.";
+CM_ SG_ 512 Pression "Pression de freinage en %, 1 octet brut, aucun facteur d'échelle.";
+CM_ SG_ 512 Etat "État des freins : 0 = OK, 1 = usure détectée (probabilité 10%% côté simulation).";
+
+VAL_ 512 Etat 0 "OK" 1 "Usure detectee" ;
